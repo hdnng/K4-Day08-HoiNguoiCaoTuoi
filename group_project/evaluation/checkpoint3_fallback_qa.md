@@ -32,12 +32,21 @@ Chạy từng câu OOD qua `pageindex_search(query, top_k=3)` và ghi kết qu�
 
 | ID | PageIndex được gọi | Kết quả có lạc đề | Kết quả mong đợi | Trạng thái | Ghi chú |
 |---|---|---|---|---|---|
-| OOD-01 | Chờ Task 8 | Chờ Task 8 | `[]` hoặc không đủ evidence | Chưa chạy | |
-| OOD-02 | Chờ Task 8 | Chờ Task 8 | `[]` hoặc không đủ evidence | Chưa chạy | |
-| OOD-03 | Chờ Task 8 | Chờ Task 8 | `[]` hoặc không đủ evidence | Chưa chạy | |
-| OOD-04 | Chờ Task 8 | Chờ Task 8 | `[]` hoặc không đủ evidence | Chưa chạy | |
-| OOD-05 | Chờ Task 8 | Chờ Task 8 | `[]` hoặc không đủ evidence | Chưa chạy | |
-| IN-01 | Chờ Task 8 | Không | Kết quả trả hàng/hoàn tiền | Chưa chạy | |
+| OOD-01 | Không | Chưa đánh giá | `[]` hoặc không đủ evidence | Bị chặn credit | Upload bị PageIndex từ chối: `InsufficientCredits`. |
+| OOD-02 | Không | Chưa đánh giá | `[]` hoặc không đủ evidence | Bị chặn credit | Upload bị PageIndex từ chối: `InsufficientCredits`. |
+| OOD-03 | Không | Chưa đánh giá | `[]` hoặc không đủ evidence | Bị chặn credit | Upload bị PageIndex từ chối: `InsufficientCredits`. |
+| OOD-04 | Không | Chưa đánh giá | `[]` hoặc không đủ evidence | Bị chặn credit | Upload bị PageIndex từ chối: `InsufficientCredits`. |
+| OOD-05 | Không | Chưa đánh giá | `[]` hoặc không đủ evidence | Bị chặn credit | Upload bị PageIndex từ chối: `InsufficientCredits`. |
+| IN-01 | Không | Chưa đánh giá | Kết quả trả hàng/hoàn tiền | Bị chặn credit | Không có document ID vì upload thất bại. |
+
+### Kết quả kiểm tra kỹ thuật
+
+- `pytest tests/test_individual.py::TestTask7 tests/test_individual.py::TestTask8 -v`: **5 passed**.
+- Task 7 đã gộp kết quả RRF và đáp ứng các kiểm thử về kiểu trả về, `top_k` và trường `score`.
+- Task 8 có hàm `pageindex_search()` trả về đúng cấu trúc theo kiểm thử.
+- Đã cấu hình và xác thực `PAGEINDEX_API_KEY`; PageIndex từ chối upload cả 9 tài liệu với lỗi `InsufficientCredits`. Query sau đó không chạy được vì không có document ID hợp lệ.
+- Task 8 tạo PDF tạm trong `data/standardized/` và `pageindex_docs.json` trong lúc upload; các tệp tạm đã được xóa sau khi test.
+- Task 9 chưa được hoàn thiện, vì vậy chưa thể xác minh việc pipeline tự động chuyển từ hybrid retrieval sang PageIndex.
 
 ## Tiêu chí pass
 
