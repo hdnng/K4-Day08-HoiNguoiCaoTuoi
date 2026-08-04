@@ -1,0 +1,53 @@
+{
+  "documents": [
+    {
+      "filename": "nghi-dinh-52-2013-thuong-mai-dien-tu.pdf",
+      "title": "Nghị định 52/2013/NĐ-CP về thương mại điện tử",
+      "source_url": "https://moit.gov.vn/upload/2005517/20210623/_ND52-2013-CP.pdf",
+      "publisher": "Bộ Công Thương",
+      "customer_role": "both"
+    },
+    {
+      "filename": "thong-tu-01-2022-quan-ly-website-va-ung-dung-tmdt.pdf",
+      "title": "Thông tư 01/2022/TT-BCT về quản lý website và ứng dụng thương mại điện tử",
+      "source_url": "https://moit.gov.vn/upload/2005517/20220218/01-bct_signed_46d96.pdf",
+      "publisher": "Bộ Công Thương",
+      "customer_role": "both"
+    },
+    {
+      "filename": "van-ban-hop-nhat-41-2026-quan-ly-website-tmdt.pdf",
+      "title": "Văn bản hợp nhất 41/VBHN-BCT về quản lý website thương mại điện tử",
+      "source_url": "https://moit.gov.vn/upload/2005517/fck/files/1_VBHN-BCT_2026_41_abd67.pdf",
+      "publisher": "Bộ Công Thương",
+      "customer_role": "both"
+    },
+    {
+      "filename": "van-ban-hop-nhat-42-2026-quan-ly-ung-dung-tmdt.pdf",
+      "title": "Văn bản hợp nhất 42/VBHN-BCT về quản lý hoạt động thương mại điện tử qua ứng dụng di động",
+      "source_url": "https://moit.gov.vn/upload/2005517/fck/files/1_VBHN-BCT_2026_42_d0a6c.pdf",
+      "publisher": "Bộ Công Thương",
+      "customer_role": "both"
+    },
+    {
+      "filename": "van-ban-hop-nhat-20-2020-thu-tuc-website-tmdt.pdf",
+      "title": "Văn bản hợp nhất 20/VBHN-BCT về thủ tục thông báo, đăng ký website thương mại điện tử",
+      "source_url": "https://moit.gov.vn/upload/2005517/20210623/_VB_1585195314093_VB_VBHN%2020%202020.pdf",
+      "publisher": "Bộ Công Thương",
+      "customer_role": "seller"
+    },
+    {
+      "filename": "sach-trang-thuong-mai-dien-tu-viet-nam-2022.pdf",
+      "title": "Sách trắng Thương mại điện tử Việt Nam 2022",
+      "source_url": "https://moit.gov.vn/upload/2005517/fck/files/BCTMDT2022-final-pdf_08c88.PDF",
+      "publisher": "Bộ Công Thương",
+      "customer_role": "both"
+    },
+    {
+      "filename": "thong-tu-12-2013-thu-tuc-website-tmdt.pdf",
+      "title": "Thông tư 12/2013/TT-BCT về thủ tục thông báo, đăng ký website thương mại điện tử",
+      "source_url": "https://moit.gov.vn/upload/2005517/20210623/_TT12-2013-BCT.pdf",
+      "publisher": "Bộ Công Thương",
+      "customer_role": "seller"
+    }
+  ]
+}
