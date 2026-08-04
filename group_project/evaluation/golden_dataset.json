@@ -1,17 +1,22 @@
 [
-  {
-    "question": "Người mua có thể yêu cầu trả hàng/hoàn tiền trong thời hạn bao lâu sau khi nhận hàng?",
-    "expected_answer": "Trong vòng 15 ngày kể từ khi giao hàng thành công (24 giờ đối với thực phẩm tươi sống/đông lạnh).",
-    "expected_context": "Trang Returns and Refunds Policy, mục Return/Refund Eligibility"
-  },
-  {
-    "question": "Shopee hỗ trợ những phương thức thanh toán nào?",
-    "expected_answer": "ShopeePay Wallet, thẻ tín dụng/ghi nợ, trả góp qua thẻ, QR Code, chuyển khoản qua app ngân hàng, thẻ NAPAS, Apple Pay, Google Pay, và COD.",
-    "expected_context": "Trang Payment Methods Overview"
-  },
-  {
-    "question": "Người bán không được đăng bán những sản phẩm nào?",
-    "expected_answer": "Hàng giả/nhái, sản phẩm bất hợp pháp, vi phạm sở hữu trí tuệ, và các mặt hàng nằm trong danh sách cấm của sàn.",
-    "expected_context": "Trang Product Listing Regulations, mục Prohibited Content"
-  }
+  {"id": "GD-01", "question": "Thực phẩm tươi sống hoặc đông lạnh trên Shopee phải gửi yêu cầu trả hàng/hoàn tiền trong bao lâu?", "expected_answer": "Trong vòng 24 giờ kể từ khi đơn hàng ở trạng thái Giao hàng thành công, trừ khiếu nại Không nhận được hàng.", "expected_context": "shopee-return-refund-policy.md — Thời hạn gửi yêu cầu"},
+  {"id": "GD-02", "question": "Với đa số đơn Shopee, thời hạn yêu cầu trả hàng/hoàn tiền là bao lâu?", "expected_answer": "Trong vòng 15 ngày kể từ khi đơn hàng ở trạng thái Giao hàng thành công.", "expected_context": "shopee-return-refund-policy.md — Thời hạn gửi yêu cầu"},
+  {"id": "GD-03", "question": "Đơn Shopee do người bán tự vận chuyển có thời hạn khiếu nại như thế nào?", "expected_answer": "Trong 15 ngày từ khi người mua bấm Đã nhận được hàng, hoặc 20 ngày từ khi Lấy hàng thành công nếu người mua chưa xác nhận đã nhận hàng.", "expected_context": "shopee-return-refund-policy.md — Thời hạn gửi yêu cầu"},
+  {"id": "GD-04", "question": "Shopee thường phản hồi yêu cầu trả hàng/hoàn tiền trong bao lâu?", "expected_answer": "Thông thường trong vòng 3 đến 5 ngày làm việc, không tính thứ Bảy, Chủ Nhật và ngày lễ.", "expected_context": "shopee-return-refund-policy.md — Thời hạn gửi yêu cầu"},
+  {"id": "GD-05", "question": "Những lý do nào có thể dùng để yêu cầu trả hàng/hoàn tiền trên Shopee?", "expected_answer": "Ví dụ không nhận được hàng, thiếu hàng, giao sai, hàng hư hỏng hoặc lỗi, không đúng mô tả, đã qua sử dụng, hàng giả; đổi ý chỉ áp dụng trong điều kiện nêu tại chính sách.", "expected_context": "shopee-return-refund-policy.md — Lý do trả hàng/hoàn tiền hợp lệ"},
+  {"id": "GD-06", "question": "Sau khi yêu cầu được chấp thuận, Shopee xử lý hoàn tiền trong bao lâu?", "expected_answer": "Trong vòng 48 giờ sau khi yêu cầu được chấp thuận, không tính thứ Bảy, Chủ Nhật và ngày lễ.", "expected_context": "shopee-return-refund-policy.md — Điều khoản hoàn tiền"},
+  {"id": "GD-07", "question": "Người dùng Shopee có thể yêu cầu gì đối với dữ liệu cá nhân của mình?", "expected_answer": "Có thể yêu cầu rút lại đồng ý, hạn chế hoặc phản đối việc thu thập, xử lý, sử dụng hay tiết lộ dữ liệu cá nhân qua các kênh được công bố.", "expected_context": "shopee-privacy-policy.md"},
+  {"id": "GD-08", "question": "Người bán Shopee được phép sử dụng dữ liệu cá nhân của người mua cho mục đích nào?", "expected_answer": "Chỉ cho mục đích cần thiết để phản hồi yêu cầu và hoàn thành giao dịch; không được tự ý tiết lộ cho bên thứ ba.", "expected_context": "shopee-privacy-policy.md"},
+  {"id": "GD-09", "question": "Người bán Shopee cần chuẩn bị giấy tờ gì khi được yêu cầu để vận chuyển hàng hóa?", "expected_answer": "Cần kèm hóa đơn, chứng từ chứng minh nguồn gốc hợp lệ và tài liệu chứng minh hàng hóa đáp ứng điều kiện pháp luật khi được yêu cầu.", "expected_context": "shopee-shipping-policy.md"},
+  {"id": "GD-10", "question": "Khi nào người mua có thể hủy đơn Shopee?", "expected_answer": "Có thể hủy khi đơn chờ xác nhận hoặc chờ lấy hàng nếu người bán chấp nhận; sau khi bàn giao cho đơn vị vận chuyển thì cần được đơn vị vận chuyển chấp nhận.", "expected_context": "shopee-terms-of-service.md"},
+  {"id": "GD-11", "question": "Shopee có xử lý hủy đơn, trả hàng hoặc hoàn tiền cho giao dịch do người mua và người bán tự thực hiện ngoài nền tảng không?", "expected_answer": "Không. Shopee không quản lý các hoạt động đó đối với giao dịch tự thực hiện ngoài nền tảng.", "expected_context": "shopee-terms-of-service.md"},
+  {"id": "GD-12", "question": "Điều kiện đổi hoặc trả hàng Decathlon trong 365 ngày là gì?", "expected_answer": "Sản phẩm phải còn có thể bán lại, chưa qua sử dụng hoặc sửa chữa và còn đầy đủ nhãn mác; áp dụng trong 365 ngày từ ngày mua ghi trên hóa đơn.", "expected_context": "decathlon-doi-tra.md — Chính sách đổi, trả hàng"},
+  {"id": "GD-13", "question": "Sản phẩm nào không áp dụng đổi trả tại Decathlon vì lý do vệ sinh hoặc an toàn?", "expected_answer": "Ví dụ khẩu trang, quần áo lót, túi ngủ, gối, đồ bơi; cùng các sản phẩm an toàn/bảo hộ và thực phẩm theo chính sách.", "expected_context": "decathlon-doi-tra.md — Chính sách đổi, trả hàng"},
+  {"id": "GD-14", "question": "Khách LazMall có bao lâu sau khi giao hàng để tạo yêu cầu trả hàng hoặc hoàn tiền?", "expected_answer": "Có 30 ngày sau khi hàng được giao đối với đơn hàng LazMall.", "expected_context": "lazada-doi-tra.md — Thông tin quan trọng về trả hàng và hoàn tiền"},
+  {"id": "GD-15", "question": "Người bán Lazada phải phản hồi yêu cầu đổi trả sau khi nhận hàng trả về trong bao lâu?", "expected_answer": "Trong vòng 2 ngày để tránh hệ thống tự động đưa ra quyết định.", "expected_context": "lazada-doi-tra.md — Quy trình QC"},
+  {"id": "GD-16", "question": "Điều kiện để được bảo hành miễn phí cho sản phẩm mua tại Shopee là gì?", "expected_answer": "Sản phẩm bị lỗi kỹ thuật do nhà sản xuất, còn thời hạn bảo hành và có hóa đơn điện tử hoặc mã đơn hàng; với một số đồ điện gia dụng còn cần phiếu/tem bảo hành nguyên vẹn.", "expected_context": "shopee-bao-hanh.md — Điều kiện bảo hành"},
+  {"id": "GD-17", "question": "Nếu gửi sản phẩm bảo hành qua Shopee thì thời gian dự kiến là bao lâu?", "expected_answer": "Khoảng 20 đến 45 ngày làm việc kể từ khi Shopee nhận được sản phẩm, tùy linh kiện cần thay thế.", "expected_context": "shopee-bao-hanh.md — Bảo hành thông qua Shopee"},
+  {"id": "GD-18", "question": "Thegioididong giao nhanh cho khu vực cách kho 0 đến 20 km trong bao lâu?", "expected_answer": "Từ 1 đến 2 giờ.", "expected_context": "tgdd-shipping-policy.md — Thời gian giao hàng"},
+  {"id": "GD-19", "question": "Điện thoại hoặc laptop lỗi trong tháng đầu tại Thegioididong có lựa chọn đổi mới nào?", "expected_answer": "Được đổi miễn phí cùng cấu hình trong tháng thứ nhất theo chính sách Hư gì đổi nấy.", "expected_context": "tgdd-warranty-policy.md — Nhóm 1, Đổi mới"},
+  {"id": "GD-20", "question": "Thời gian xử lý bảo hành theo cam kết 12 tháng của Thegioididong là bao lâu?", "expected_answer": "Trong vòng 15 ngày kể từ khi nhận máy đến khi bàn giao lại.", "expected_context": "tgdd-warranty-policy.md — Nhóm 1, Bảo hành theo cam kết"}
 ]
