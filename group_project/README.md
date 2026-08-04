@@ -92,10 +92,10 @@ graph TD
 
 | Thành viên | MSSV | Nhiệm vụ | Trạng thái |
 |-----------|------|----------|------------|
-| **Hải Đăng** (hdnng) | *Cập nhật sau* | **Role 1 (Team Leader & Architect):** Phân chia task, duyệt mã nguồn, ghép code vào app.py và thuyết trình tổng quan dự án. | Hoàn thành |
-| **Sái Hoài Nam** | *Cập nhật sau* | **Role 2 (Data & Retrieval Specialist):** Thu thập dữ liệu, Chunking & Indexing vào ChromaDB, xây dựng pipeline Dense Search + Reranking + Vectorless Fallback. | Hoàn thành |
-| **Trần Duy Sơn** (accga12345) | *Cập nhật sau* | **Role 3 (Frontend & Chatbot Dev):** Crawl dữ liệu tin tức, Reordering, xây dựng generation LLM, và hoàn thiện giao diện Chatbot Streamlit UI. | Hoàn thành |
-| **Hoàng Nam / Dương** | *Cập nhật sau* | **Role 4 (Evaluation & QA Engineer):** Convert dữ liệu sang Markdown, xây dựng BM25/TF-IDF Search, biên soạn Golden Dataset và chạy RAGAS eval. | Hoàn thành |
+| **Sái Hoài Nam** | 2A202601993 | **Role 1 (Team Leader & Architect):** Phân chia task, duyệt mã nguồn, ghép code vào app.py và thuyết trình tổng quan dự án. | Hoàn thành |
+| **Phạm Hoàng Nam** | 2A202601442 | **Role 2 (Data & Retrieval Specialist):** Thu thập dữ liệu, Chunking & Indexing vào ChromaDB, xây dựng pipeline Dense Search + Reranking + Vectorless Fallback. | Hoàn thành |
+| **Dương Ngọc Hải**| 2A202601748 | **Role 3 (Frontend & Chatbot Dev):** Crawl dữ liệu tin tức, Reordering, xây dựng generation LLM, và hoàn thiện giao diện Chatbot Streamlit UI. | Hoàn thành |
+| **Trần Duy Sơn** | 2A202601792 | **Role 4 (Evaluation & QA Engineer):** Convert dữ liệu sang Markdown, xây dựng BM25/TF-IDF Search, biên soạn Golden Dataset và chạy RAGAS eval. | Hoàn thành |
 
 ---
 
