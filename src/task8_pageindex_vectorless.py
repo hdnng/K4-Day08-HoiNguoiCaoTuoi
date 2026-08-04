@@ -36,21 +36,37 @@ def upload_documents():
     """
     Upload toàn bộ markdown documents lên PageIndex.
     """
-    # TODO: Implement upload
-    #
-    # Tham khảo: https://github.com/VectifyAI/PageIndex
-    #
-    # from pageindex.client import PageIndexClient
-    #
-    # client = PageIndexClient(api_key=PAGEINDEX_API_KEY)
-    #
-    # for md_file in STANDARDIZED_DIR.rglob("*.md"):
-    #     # Lưu ý: PageIndex nhận PDF, không nhận .md trực tiếp — có thể cần
-    #     # convert markdown sang PDF đơn giản bằng fpdf2 trước khi upload.
-    #     resp = client.submit_document(str(pdf_path))
-    #     doc_id = resp.get("doc_id") or resp.get("id")
-    #     print(f"  ✓ Uploaded: {md_file.name} -> {doc_id}")
-    raise NotImplementedError("Implement upload_documents")
+    from pageindex.client import PageIndexClient
+    import json
+    from fpdf import FPDF
+    
+    client = PageIndexClient(api_key=PAGEINDEX_API_KEY)
+    doc_ids = []
+    
+    for md_file in STANDARDIZED_DIR.rglob("*.md"):
+        # Convert markdown to PDF simply using fpdf2
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font("helvetica", size=12)
+        # Avoid unicode issues by ignoring non-ascii chars for this simple conversion
+        text = md_file.read_text(encoding="utf-8").encode("ascii", "ignore").decode("ascii")
+        pdf.multi_cell(0, 10, text)
+        
+        pdf_path = md_file.with_suffix(".pdf")
+        pdf.output(str(pdf_path))
+        
+        try:
+            resp = client.submit_document(str(pdf_path))
+            doc_id = resp.get("doc_id") or resp.get("id")
+            if doc_id:
+                doc_ids.append(doc_id)
+                print(f"  ✓ Uploaded: {md_file.name} -> {doc_id}")
+        except Exception as e:
+            print(f"  ❌ Error uploading {md_file.name}: {e}")
+            
+    # Save doc_ids for querying later
+    with open("pageindex_docs.json", "w") as f:
+        json.dump(doc_ids, f)
 
 
 def pageindex_search(query: str, top_k: int = 5) -> list[dict]:
@@ -70,30 +86,50 @@ def pageindex_search(query: str, top_k: int = 5) -> list[dict]:
             'source': 'pageindex'   # Đánh dấu nguồn retrieval
         }
     """
-    # TODO: Implement PageIndex query
-    #
-    # from pageindex.client import PageIndexClient
-    #
-    # client = PageIndexClient(api_key=PAGEINDEX_API_KEY)
-    # resp = client.submit_query(doc_id=doc_id, query=query)
-    # retrieval_id = resp.get("retrieval_id") or resp.get("id")
-    #
-    # # Poll cho đến khi status == "completed"
-    # retrieval = client.get_retrieval(retrieval_id)
-    #
-    # # Parse retrieval["retrieved_nodes"] — mỗi node có "relevant_contents"
-    # results = []
-    # for node in retrieval.get("retrieved_nodes", [])[:2]:
-    #     for group in node.get("relevant_contents", []):
-    #         for item in group:
-    #             results.append({
-    #                 "content": item.get("relevant_content", ""),
-    #                 "score": ...,  # PageIndex không trả score trực tiếp — tự gán theo rank
-    #                 "metadata": {"section": item.get("section_title")},
-    #                 "source": "pageindex",
-    #             })
-    # return results[:top_k]
-    raise NotImplementedError("Implement pageindex_search")
+    from pageindex.client import PageIndexClient
+    import time
+    import json
+    
+    # Check if we have uploaded documents
+    doc_id = "test_doc_id"
+    if Path("pageindex_docs.json").exists():
+        doc_ids = json.loads(Path("pageindex_docs.json").read_text())
+        if doc_ids:
+            doc_id = doc_ids[0] # querying the first document as a fallback
+            
+    client = PageIndexClient(api_key=PAGEINDEX_API_KEY)
+    
+    try:
+        resp = client.submit_query(doc_id=doc_id, query=query)
+        retrieval_id = resp.get("retrieval_id") or resp.get("id")
+        
+        # Poll cho đến khi status == "completed"
+        retrieval = {}
+        for _ in range(15):
+            retrieval = client.get_retrieval(retrieval_id)
+            if retrieval.get("status") == "completed":
+                break
+            time.sleep(1)
+            
+        # Parse retrieval["retrieved_nodes"]
+        results = []
+        score = 1.0 # Base score for first result
+        
+        for node in retrieval.get("retrieved_nodes", [])[:2]:
+            for group in node.get("relevant_contents", []):
+                for item in group:
+                    results.append({
+                        "content": item.get("relevant_content", ""),
+                        "score": round(score, 4),
+                        "metadata": {"section": item.get("section_title", "")},
+                        "source": "pageindex",
+                    })
+                    score = max(0.1, score - 0.1) # Decrease score slightly for subsequent items
+                    
+        return results[:top_k]
+    except Exception as e:
+        print(f"PageIndex error: {e}")
+        return []
 
 
 if __name__ == "__main__":
