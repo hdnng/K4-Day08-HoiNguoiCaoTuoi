@@ -12,20 +12,34 @@ Yêu cầu:
 import os
 from pathlib import Path
 import chromadb
-from sentence_transformers import SentenceTransformer
+from dotenv import load_dotenv
+from google import genai
+from google.genai import types
+
+load_dotenv()
 
 CHROMA_DIR = Path(__file__).parent.parent / "chroma_db"
-EMBEDDING_MODEL = "BAAI/bge-m3"
+# Phải khớp với EMBEDDING_MODEL/EMBEDDING_DIM trong task4_chunking_indexing.py —
+# query và chunk đã lưu trong ChromaDB phải cùng không gian vector thì so sánh
+# cosine similarity mới có ý nghĩa.
+EMBEDDING_MODEL = "gemini-embedding-001"
+EMBEDDING_DIM = 1024
 COLLECTION_NAME = "ecommerce_support_docs"
 
-_model = None
+_client = None
 _collection = None
 
-def get_embedding_model():
-    global _model
-    if _model is None:
-        _model = SentenceTransformer(EMBEDDING_MODEL)
-    return _model
+def get_genai_client():
+    global _client
+    if _client is None:
+        api_key = os.getenv("GEMINI_API_KEY")
+        if not api_key:
+            raise RuntimeError(
+                "Thiếu GEMINI_API_KEY. Hãy điền key Gemini vào file .env "
+                "(xem .env.example) trước khi chạy semantic_search()."
+            )
+        _client = genai.Client(api_key=api_key)
+    return _client
 
 def get_collection():
     global _collection
@@ -54,9 +68,14 @@ def semantic_search(query: str, top_k: int = 10) -> list[dict]:
         }
         Sorted by score descending.
     """
-    model = get_embedding_model()
-    query_vector = model.encode(query).tolist()
-    
+    client = get_genai_client()
+    result = client.models.embed_content(
+        model=EMBEDDING_MODEL,
+        contents=query,
+        config=types.EmbedContentConfig(output_dimensionality=EMBEDDING_DIM),
+    )
+    query_vector = result.embeddings[0].values
+
     collection = get_collection()
     results = collection.query(
         query_embeddings=[query_vector],
