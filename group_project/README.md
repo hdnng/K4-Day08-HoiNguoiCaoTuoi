@@ -69,8 +69,21 @@ Xem code mẫu (DeepEval/RAGAS/TruLens) chi tiết trong `README.md` gốc mục
 
 ## Kiến Trúc Hệ Thống
 
-```
-[Vẽ diagram kiến trúc ở đây]
+```mermaid
+graph TD
+    A[User Query] --> B(RAG Pipeline)
+    B --> C{Hybrid Search}
+    C -->|Dense| D[ChromaDB + bge-m3]
+    C -->|Sparse| E[BM25 / TF-IDF]
+    D --> F[RRF Reranking]
+    E --> F
+    F --> G{Best Score > 0.48?}
+    G -->|Yes| H[Top K Chunks]
+    G -->|No| I[PageIndex Fallback Search]
+    I --> H
+    H --> J[Document Reordering]
+    J --> K[LLM Generation with Citation]
+    K --> L[Streamlit Chatbot UI]
 ```
 
 ---
@@ -79,10 +92,10 @@ Xem code mẫu (DeepEval/RAGAS/TruLens) chi tiết trong `README.md` gốc mục
 
 | Thành viên | MSSV | Nhiệm vụ | Trạng thái |
 |-----------|------|----------|------------|
-| | | | |
-| | | | |
-| | | | |
-| | | | |
+| **Sái Hoài Nam** | 2A202601993 | **Role 1 (Team Leader & Architect):** Phân chia task, duyệt mã nguồn, ghép code vào app.py và thuyết trình tổng quan dự án. | Hoàn thành |
+| **Phạm Hoàng Nam** | 2A202601442 | **Role 2 (Data & Retrieval Specialist):** Thu thập dữ liệu, Chunking & Indexing vào ChromaDB, xây dựng pipeline Dense Search + Reranking + Vectorless Fallback. | Hoàn thành |
+| **Dương Ngọc Hải**| 2A202601748 | **Role 3 (Frontend & Chatbot Dev):** Crawl dữ liệu tin tức, Reordering, xây dựng generation LLM, và hoàn thiện giao diện Chatbot Streamlit UI. | Hoàn thành |
+| **Trần Duy Sơn** | 2A202601792 | **Role 4 (Evaluation & QA Engineer):** Convert dữ liệu sang Markdown, xây dựng BM25/TF-IDF Search, biên soạn Golden Dataset và chạy RAGAS eval. | Hoàn thành |
 
 ---
 
