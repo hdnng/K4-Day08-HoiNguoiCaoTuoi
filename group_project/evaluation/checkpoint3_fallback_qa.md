@@ -32,12 +32,24 @@ Chạy từng câu OOD qua `pageindex_search(query, top_k=3)` và ghi kết qu�
 
 | ID | PageIndex được gọi | Kết quả có lạc đề | Kết quả mong đợi | Trạng thái | Ghi chú |
 |---|---|---|---|---|---|
-| OOD-01 | Chờ Task 8 | Chờ Task 8 | `[]` hoặc không đủ evidence | Chưa chạy | |
-| OOD-02 | Chờ Task 8 | Chờ Task 8 | `[]` hoặc không đủ evidence | Chưa chạy | |
-| OOD-03 | Chờ Task 8 | Chờ Task 8 | `[]` hoặc không đủ evidence | Chưa chạy | |
-| OOD-04 | Chờ Task 8 | Chờ Task 8 | `[]` hoặc không đủ evidence | Chưa chạy | |
-| OOD-05 | Chờ Task 8 | Chờ Task 8 | `[]` hoặc không đủ evidence | Chưa chạy | |
-| IN-01 | Chờ Task 8 | Không | Kết quả trả hàng/hoàn tiền | Chưa chạy | |
+| OOD-01 | Có | Không | `[]` hoặc không đủ evidence | Đạt | Query “Thủ đô của Canada là gì?” trả `[]`. |
+| OOD-02 | Có | Không | `[]` hoặc không đủ evidence | Đạt | Query “Cách nấu phở bò tại nhà?” trả `[]`. |
+| OOD-03 | Có | Không | `[]` hoặc không đủ evidence | Đạt | Query “Viết thuật toán quicksort bằng Python.” trả `[]`. |
+| OOD-04 | Có | Không | `[]` hoặc không đủ evidence | Đạt | Query “Dự đoán giá Bitcoin tuần tới.” trả `[]`. |
+| OOD-05 | Có | Không | `[]` hoặc không đủ evidence | Đạt | Query `xyzabc123nonsense` trả `[]`. |
+| IN-01 | Có | Không | Kết quả trả hàng/hoàn tiền | Đạt | Trả các đoạn về thời hạn trả hàng/hoàn tiền từ tài liệu Return/Refund. |
+
+### Kết quả kiểm tra kỹ thuật
+
+- `pytest tests/test_individual.py::TestTask7 tests/test_individual.py::TestTask8 -v`: **5 passed**.
+- Task 7 đã gộp kết quả RRF và đáp ứng các kiểm thử về kiểu trả về, `top_k` và trường `score`.
+- Task 8 có hàm `pageindex_search()` trả về đúng cấu trúc theo kiểm thử.
+- Đã cấu hình `PAGEINDEX_API_KEY`; tài khoản hiện có 9 document đã upload, xử lý xong và sẵn sàng retrieval.
+- Kiểm thử PageIndex: câu hỏi về chính sách bảo mật trả nội dung phù hợp với `source: "pageindex"`; OOD-01 trả `[]`, không có evidence lạc đề.
+- OOD-02 đến OOD-05 đều trả `[]`, xác nhận không có evidence TMĐT lạc đề cho các query ngoài domain đã thử.
+- Đã sửa `pageindex_search()` để kiểm tra toàn bộ document ID đã upload. IN-01 trả đúng thời hạn trả hàng/hoàn tiền từ tài liệu Return/Refund.
+- Task 8 tạo PDF tạm trong `data/_tmp_pdf/` và lưu ID document tại `pageindex_docs.json`; cả hai đều được Git bỏ qua vì là trạng thái chạy cục bộ.
+- Task 9 chưa được hoàn thiện, vì vậy chưa thể xác minh việc pipeline tự động chuyển từ hybrid retrieval sang PageIndex.
 
 ## Tiêu chí pass
 
