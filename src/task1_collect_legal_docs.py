@@ -36,22 +36,22 @@ def setup_directory():
     print(f"✓ Thư mục đã sẵn sàng: {DATA_DIR}")
 
 
-# TODO: Tải file PDF/DOCX về DATA_DIR
-# Có thể tải thủ công hoặc viết script download nếu có direct link.
-#
-# Ví dụ nếu có direct link:
-#
-# import requests
-#
-# def download_file(url: str, filename: str):
-#     response = requests.get(url)
-#     filepath = DATA_DIR / filename
-#     filepath.write_bytes(response.content)
-#     print(f"✓ Đã tải: {filepath}")
-#
-# Nếu trang là HTML thuần (không phải PDF sẵn), có thể convert nội dung text
-# thành PDF đơn giản bằng thư viện fpdf2 (đã có trong requirements.txt).
+def check_collected_documents():
+    """Kiểm tra và liệt kê các file PDF đã thu thập trong data/landing/legal/."""
+    print("=" * 50)
+    print("Task 1: Kiểm tra văn bản chính sách đã thu thập")
+    print("=" * 50)
+    
+    pdf_files = list(DATA_DIR.rglob("*.pdf"))
+    if not pdf_files:
+        print(f"⚠ Chưa có file PDF nào trong {DATA_DIR}!")
+        print("Vui lòng tải thủ công các file PDF chính sách (Shopee, Tiki...) vào thư mục này.")
+    else:
+        print(f"✓ Đã tìm thấy {len(pdf_files)} văn bản chính sách:")
+        for pdf in pdf_files:
+            print(f"  - {pdf.name}")
 
 
 if __name__ == "__main__":
     setup_directory()
+    check_collected_documents()

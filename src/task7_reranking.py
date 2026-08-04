@@ -31,30 +31,49 @@ def rerank_cross_encoder(
     Returns:
         List of top_k candidates, re-scored và sorted by rerank_score descending.
     """
-    # TODO: Implement cross-encoder reranking
-    #
-    # Option A: Jina Reranker API
-    # import requests
-    # response = requests.post(
-    #     "https://api.jina.ai/v1/rerank",
-    #     headers={"Authorization": f"Bearer {JINA_API_KEY}"},
-    #     json={
-    #         "model": "jina-reranker-v2-base-multilingual",
-    #         "query": query,
-    #         "documents": [c["content"] for c in candidates],
-    #         "top_n": top_k
-    #     }
-    # )
-    # reranked = response.json()["results"]
-    # return [
-    #     {**candidates[r["index"]], "score": r["relevance_score"]}
-    #     for r in reranked
-    # ]
-    #
-    # Option B: Local model (Qwen3-Reranker)
-    # from transformers import AutoModelForSequenceClassification, AutoTokenizer
-    # ...
-    raise NotImplementedError("Implement rerank_cross_encoder")
+    # Implement cross-encoder reranking
+    # Using local model (sentence-transformers) as fallback if no API
+    import os
+    from dotenv import load_dotenv
+    load_dotenv()
+    JINA_API_KEY = os.getenv("JINA_API_KEY")
+
+    if JINA_API_KEY:
+        import requests
+        response = requests.post(
+            "https://api.jina.ai/v1/rerank",
+            headers={"Authorization": f"Bearer {JINA_API_KEY}"},
+            json={
+                "model": "jina-reranker-v2-base-multilingual",
+                "query": query,
+                "documents": [c["content"] for c in candidates],
+                "top_n": top_k
+            }
+        )
+        if response.status_code == 200:
+            reranked = response.json().get("results", [])
+            return [
+                {**candidates[r["index"]], "score": r["relevance_score"]}
+                for r in reranked
+            ]
+        else:
+            print(f"Jina API Error: {response.text}")
+            
+    # Fallback to local CrossEncoder
+    try:
+        from sentence_transformers import CrossEncoder
+        # Using a lightweight, widely available cross-encoder model
+        model = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2', max_length=512)
+        pairs = [[query, c["content"]] for c in candidates]
+        scores = model.predict(pairs)
+        
+        for i, score in enumerate(scores):
+            candidates[i]["score"] = float(score)
+            
+        return sorted(candidates, key=lambda x: x["score"], reverse=True)[:top_k]
+    except Exception as e:
+        print(f"CrossEncoder error: {e}. Falling back to original order.")
+        return sorted(candidates, key=lambda x: x.get("score", 0), reverse=True)[:top_k]
 
 
 def rerank_mmr(
@@ -77,37 +96,49 @@ def rerank_mmr(
     Returns:
         List of top_k candidates selected by MMR.
     """
-    # TODO: Implement MMR
-    #
-    # selected = []
-    # remaining = list(range(len(candidates)))
-    #
-    # for _ in range(min(top_k, len(candidates))):
-    #     best_idx = None
-    #     best_score = float('-inf')
-    #
-    #     for idx in remaining:
-    #         # Relevance to query
-    #         relevance = cosine_sim(query_embedding, candidates[idx]["embedding"])
-    #
-    #         # Max similarity to already selected
-    #         max_sim_to_selected = 0
-    #         for sel_idx in selected:
-    #             sim = cosine_sim(candidates[idx]["embedding"], candidates[sel_idx]["embedding"])
-    #             max_sim_to_selected = max(max_sim_to_selected, sim)
-    #
-    #         # MMR score
-    #         mmr_score = lambda_param * relevance - (1 - lambda_param) * max_sim_to_selected
-    #
-    #         if mmr_score > best_score:
-    #             best_score = mmr_score
-    #             best_idx = idx
-    #
-    #     selected.append(best_idx)
-    #     remaining.remove(best_idx)
-    #
-    # return [candidates[i] for i in selected]
-    raise NotImplementedError("Implement rerank_mmr")
+    # Implement MMR
+    import numpy as np
+    
+    def cosine_sim(a, b):
+        return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b) + 1e-10)
+
+    selected = []
+    remaining = list(range(len(candidates)))
+
+    for _ in range(min(top_k, len(candidates))):
+        best_idx = None
+        best_score = float('-inf')
+
+        for idx in remaining:
+            # Check if embedding exists, if not MMR cannot be used for this chunk
+            if "embedding" not in candidates[idx]:
+                continue
+                
+            # Relevance to query
+            relevance = cosine_sim(query_embedding, candidates[idx]["embedding"])
+
+            # Max similarity to already selected
+            max_sim_to_selected = 0
+            for sel_idx in selected:
+                sim = cosine_sim(candidates[idx]["embedding"], candidates[sel_idx]["embedding"])
+                max_sim_to_selected = max(max_sim_to_selected, sim)
+
+            # MMR score
+            mmr_score = lambda_param * relevance - (1 - lambda_param) * max_sim_to_selected
+
+            if mmr_score > best_score:
+                best_score = mmr_score
+                best_idx = idx
+
+        if best_idx is not None:
+            # Save the new MMR score
+            candidates[best_idx]["score"] = best_score
+            selected.append(best_idx)
+            remaining.remove(best_idx)
+        else:
+            break
+
+    return [candidates[i] for i in selected]
 
 
 def rerank_rrf(
@@ -175,8 +206,39 @@ def rerank(
     if method == "cross_encoder":
         return rerank_cross_encoder(query, candidates, top_k)
     elif method == "mmr":
-        # Cần query_embedding - embed query trước
-        raise NotImplementedError("Call rerank_mmr with query_embedding")
+        # Embed query and candidates if missing
+        import os
+        from dotenv import load_dotenv
+        from google import genai
+        from google.genai import types
+        
+        load_dotenv()
+        api_key = os.getenv("GEMINI_API_KEY")
+        if not api_key:
+             # Fallback if no gemini key
+             return candidates[:top_k]
+             
+        client = genai.Client(api_key=api_key)
+        
+        # Embed query
+        res = client.models.embed_content(
+            model="gemini-embedding-001",
+            contents=query,
+            config=types.EmbedContentConfig(output_dimensionality=1024),
+        )
+        query_emb = res.embeddings[0].values
+        
+        # Embed any candidates missing embeddings
+        for c in candidates:
+            if "embedding" not in c:
+                c_res = client.models.embed_content(
+                    model="gemini-embedding-001",
+                    contents=c["content"],
+                    config=types.EmbedContentConfig(output_dimensionality=1024),
+                )
+                c["embedding"] = c_res.embeddings[0].values
+                
+        return rerank_mmr(query_emb, candidates, top_k)
     elif method == "rrf":
         return rerank_rrf([candidates], top_k=top_k)
     else:

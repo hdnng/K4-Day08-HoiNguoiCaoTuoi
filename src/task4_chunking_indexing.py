@@ -57,7 +57,7 @@ CHUNKING_METHOD = "recursive"  # "recursive" | "markdown_header" | "semantic"
 EMBEDDING_MODEL = "gemini-embedding-001"
 EMBEDDING_DIM = 1024  # output_dimensionality truncate từ 3072 xuống 1024 để nhẹ hơn khi lưu ChromaDB
 
-# TODO: Chọn vector store
+# Vector store configuration
 VECTOR_STORE = "chromadb"  # "chromadb" | "weaviate" | "faiss"
 COLLECTION_NAME = "ecommerce_support_docs"
 
