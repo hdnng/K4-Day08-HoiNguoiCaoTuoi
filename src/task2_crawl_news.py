@@ -35,8 +35,15 @@ def setup_directory():
 
 # TODO: Điền danh sách URL bài viết cần crawl
 ARTICLE_URLS = [
-    # Ví dụ (trang công khai Shopee Vietnam):
-    # "https://help.shopee.vn/portal/4/article/...",
+    "https://help.shopee.vn/portal/4/article/79472",
+    "https://help.shopee.vn/portal/4/article/79491",
+    "https://help.shopee.vn/portal/4/article/79555",
+    "https://help.shopee.vn/portal/4/article/79571",
+    "https://help.shopee.vn/portal/4/article/190242",
+    "https://help.shopee.vn/portal/4/article/189473",
+    "https://help.shopee.vn/portal/4/article/77251",
+    "https://help.shopee.vn/portal/4/article/79377",
+    "https://help.shopee.vn/portal/4/article/183296"
 ]
 
 
@@ -55,15 +62,19 @@ async def crawl_article(url: str) -> dict:
     from crawl4ai import AsyncWebCrawler
 
     # TODO: Implement crawling logic
-    # async with AsyncWebCrawler() as crawler:
-    #     result = await crawler.arun(url=url)
-    #     return {
-    #         "url": url,
-    #         "title": result.metadata.get("title", "Unknown"),
-    #         "date_crawled": datetime.now().isoformat(),
-    #         "content_markdown": result.markdown,
-    #     }
-    raise NotImplementedError("Implement crawl_article")
+    async with AsyncWebCrawler() as crawler:
+        result = await crawler.arun(url=url)
+        
+        title = "Unknown"
+        if result.metadata and "title" in result.metadata:
+            title = result.metadata["title"]
+            
+        return {
+            "url": url,
+            "title": title,
+            "date_crawled": datetime.now().isoformat(),
+            "content_markdown": result.markdown,
+        }
 
 
 async def crawl_all():
@@ -77,8 +88,8 @@ async def crawl_all():
         # Lưu file JSON
         filename = f"article_{i:02d}.json"
         filepath = DATA_DIR / filename
-        filepath.write_text(json.dumps(article, ensure_ascii=False, indent=2))
-        print(f"  ✓ Saved: {filepath}")
+        filepath.write_text(json.dumps(article, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(f"  Saved: {filepath}")
 
 
 if __name__ == "__main__":
